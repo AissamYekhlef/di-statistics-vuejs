@@ -650,6 +650,11 @@ export default {
       this.apexLoading = true;
     });
   },
+  created() {
+    if (! window.localStorage.getItem('user')) {
+      this.$router.push('/login');
+    }
+  }
 };
 </script>
 

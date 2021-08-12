@@ -146,7 +146,7 @@
             </v-btn>
         </template>
         <v-list >
-          <div class="text-h5 grey--text text--darken-3 px-4 pt-4">John Smith</div>
+          <div class="text-h5 grey--text text--darken-3 px-4 pt-4">{{ this.user.user }}</div>
           <div class="subtitle-2 primary--text font-weight-regular px-4">di-statistics.com</div>
           <v-list-item-group color="primary">
             <v-list-item
@@ -179,7 +179,7 @@
 </template>
 
 <script>
-import {mapActions, mapState} from 'vuex'
+  import {mapActions, mapState} from 'vuex'
   import config from '../../config';
   import Search from "@/components/Search/Search";
 
@@ -211,6 +211,7 @@ import {mapActions, mapState} from 'vuex'
     }),
     computed: {
       ...mapState(['drawer']),
+      ...mapState("auth", [ 'user' ]),
       DRAWER_STATE :{
         get() {
           return this.drawer

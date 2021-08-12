@@ -5,7 +5,7 @@
         <v-col cols="7" class="main-part d-none d-md-none d-lg-flex">
           <div class="d-flex">
             <v-img src="@/assets/logo.svg" contain></v-img>
-            <p>Vue Material Admin</p>
+            <p>Di Statistics Admin</p>
           </div>
         </v-col>
         <v-col cols="12" lg="5" class="login-part d-flex align-center justify-center">
@@ -61,7 +61,7 @@
                                   large
                                   :disabled="password.length === 0 || email.length === 0"
                                   color="primary"
-                                  @click="login"
+                                  @click="loginUser"
                               >
                                 Login</v-btn>
                               <v-btn large text class="text-capitalize primary--text">Forget Password</v-btn>
@@ -135,7 +135,7 @@
             </v-col>
             <v-col cols="12" class="d-flex justify-center">
               <v-footer>
-                <div class="primary--text">© 2014-2020 <a href="https://flatlogic.com/" class="text-decoration-none">Flatlogic</a>, LLC. All rights reserved.</div>
+                <div class="primary--text">© 2021 <a href="https://di-statistics.com/" class="text-decoration-none">Di Statistics</a>, LLC. All rights reserved.</div>
               </v-footer>
             </v-col>
           </v-row>
@@ -146,12 +146,18 @@
 </template>
 
 <script>
+  import { mapActions } from "vuex";
+
+  // const loginForm = {
+  //   email: "",
+  //   password: ""
+  // };
 
   export default {
     name: 'Login',
     data() {
       return {
-        email: 'admin@flatlogic.com',
+        email: 'admin@admin.com',
         emailRules: [
           v => !!v || 'E-mail is required',
           v => /.+@.+/.test(v) || 'E-mail must be valid',
@@ -159,7 +165,7 @@
         createFullName: 'John Smith',
         createEmail: 'john@flatlogic.com',
         createPassword: '123456',
-        password: '123456',
+        password: 'password',
         passRules: [
           v => !!v || 'Password is required',
           v => v.length >= 6 || 'Min 6 characters'
@@ -167,13 +173,28 @@
       }
     },
     methods: {
-      login(){
-        window.localStorage.setItem('authenticated', true);
-        this.$router.push('/dashboard');
-      }
+      loginUser() {
+      this.loading = true;
+      this.login(this)
+        .then(() => {
+          // this.loading = false;
+          // this.form = Object.assign({}, loginForm);
+          console.log('Logged in successfuly');
+          this.$router.push("/dashboard");
+        })
+        .catch(err => {
+          this.loading = false;
+          if (err.response) {
+            this.error = err.response.data.message;
+          } else {
+            this.error = "Nework Error.";
+          }
+        });
+    },
+      ...mapActions("auth", ["login"])
     },
     created() {
-      if (window.localStorage.getItem('authenticated') === 'true') {
+      if (window.localStorage.getItem('user')) {
         this.$router.push('/dashboard');
       }
     }
