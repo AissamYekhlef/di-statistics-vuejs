@@ -146,7 +146,7 @@
             </v-btn>
         </template>
         <v-list >
-          <div class="text-h5 grey--text text--darken-3 px-4 pt-4">{{ this.user.user }}</div>
+          <div class="text-h5 grey--text text--darken-3 px-4 pt-4">{{ this.user_fullname()}}</div>
           <div class="subtitle-2 primary--text font-weight-regular px-4">di-statistics.com</div>
           <v-list-item-group color="primary">
             <v-list-item
@@ -220,9 +220,17 @@
     },
     methods: {
       ...mapActions([ 'TOGGLE_DRAWER' ]),
+      ...mapActions("auth", [ 'logout' ]),
       logOut: function () {
         window.localStorage.setItem('authenticated', false);
+        this.logout();
         this.$router.push('/login');
+      },
+      user_fullname() {
+        const fullname = `${this.user.username} 
+        ${this.user.first_name ? '( ' + this.user.first_name  + ' )': ''}`;
+        
+        return fullname;
       }
     }
   };
