@@ -5,7 +5,12 @@ import axios from "axios";
 
 // Full config:  https://github.com/axios/axios#request-config
 // axios.defaults.baseURL = process.env.baseURL || process.env.apiUrl || '';
-// axios.defaults.headers.common["Authorization"] = "sdsdsdsd";
+
+const user = JSON.parse(localStorage.getItem("user"));
+if(user.access_token){
+  axios.defaults.headers.common["Authorization"] = `Bearer ${user.access_token}`;
+}
+
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
 let config = {
