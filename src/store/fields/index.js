@@ -14,28 +14,42 @@ const state = {
     fieldSelected: null,
     entityTypeSelected: null,
     entityTypes: [],
-    series: null
+    series: [],
+    is_loding_entitytypes: false,
+    periods: [
+      'hourly',
+      'daily',
+      'weekly',
+      'monthly',
+      'yearly',
+    ],
 };
 
 const getters = {
   getFilters: (state) => state.filters,
   getSeries: (state) => state.series,
-  getEntityTypes: (state) => state.entityTypes
+  getEntityTypes: (state) => state.entityTypes,
+  getIs_loding_entitytypes: (state) => state.is_louding_entitytypes,
+  getPeriods: (state) => state.periods,
 };
 
 const mutations = {
+  setFilters: (state, filters) => state.filters = filters,
   setEntitytypes: (state, entityTypes) => state.entityTypes = entityTypes,
   setSeries: (state, series) => state.series = series,
   setEntityTypeSelected: (state, entityTypeSelected) => state.entityTypeSelected = entityTypeSelected,
+  setIs_loding_entitytypes: (state, is_loding_entitytypes) => state.is_loding_entitytypes = is_loding_entitytypes ,
 };
 
 const actions = {
-   async get_entitytypes({commit}) {
+   async load_entitytypes({commit}) {
+    commit('setIs_loding_entitytypes', true);
      return await  axios
       .get("/entitytypes",
         { params: {with_fields: true}  }
       ).then( ({ data }) => {
           commit('setEntitytypes', data);
+          commit('setIs_loding_entitytypes', false);
         return data;
       });
   },

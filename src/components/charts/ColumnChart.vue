@@ -1,11 +1,18 @@
 <template>
      <div id="chart">
+       <v-btn
+       @click="updateChart"
+       color="primary"
+       >
+      Refresh chart
+       </v-btn>
         <apexchart type="bar" height="350" :options="chartOptions" :series="series" v-model="series"></apexchart>
       </div>
 </template>
 
 <script>
 import Vue from "vue";
+import { mapGetters } from "vuex";
 
 import VueApexCharts from "vue-apexcharts";
 Vue.use(VueApexCharts);
@@ -13,25 +20,18 @@ Vue.component("apexchart", VueApexCharts);
 
 export default {
   name: "ColumnChart",
-  props : [
-    'fieldname'
-  ],
+  computed: mapGetters("fields", ["getSeries","getFilters","getEntityTypes"]),
   data: function() {
     return {
-      series: [{
-            name: this.fieldname,
-            data: [44, 55, 57, 56, 61, 58, 63, 60, 66]
-          }, 
-          // {
-          //   name: 'updated_at',
-          //   data: [76, 85, 101, 98, 87, 105, 91, 114, 94]
-          // }, 
-          // {
-          //   name: 'name',
-          //   data: [35, 41, 36, 26, 45, 48, 52, 53, 41]
-          // }
-          ],
-          chartOptions: {
+      seriesDB:{
+        name: 'field name',
+        data: [44, 55,  57, 56, 61, 58, 63, 60, 66],
+        categories: ['ggg', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct']
+      },
+      series: [
+
+          ],  
+      chartOptions: {
             chart: {
               type: 'bar',
               height: 350
@@ -56,7 +56,7 @@ export default {
             },
             yaxis: {
               title: {
-                text: ' (thousands)'
+                text: ' (entities)'
               }
             },
             fill: {
@@ -65,14 +65,51 @@ export default {
             tooltip: {
               y: {
                 formatter: function (val) {
-                  return val + " thousands"
+                  return val + " entity"
                 }
               }
             }
           },
     };
+  }, 
+  methods:{
+    // ...mapGetters("fields/getFilters"),
+    updateChart(){
+      console.log("this.getFilters");
+      console.log(this.getFilters);
+
+
+      this.chartOptions = {
+            ...this.chartOptions,
+            xaxis: {
+              categories: this.getSeries,
+            },
+          }
+      this.series = [{
+        name: 'storage_row',
+        data: [15, 25,  10, 56, 40, 70, 11, 23, 50]
+       }];   // return chartOptions;
+      console.log(this.getFilters);
+
+
+    }
   },
+  created(){
+    console.log(this.seriesDB.data);
+    this.series.push({
+      name: this.seriesDB.name,
+      data: this.seriesDB.data
+    });
+
+    console.log(this.getFilters);
+    console.log(this.getSeries);
+    
+    console.log(this.getEntityTypes);
+    
+    
+  }
 };
+
 </script>
 
 <style scoped>

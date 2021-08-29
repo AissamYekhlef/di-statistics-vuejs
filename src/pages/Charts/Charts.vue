@@ -123,7 +123,7 @@
         <!-- TODO add context name prefix for item-text -->
           <template>
             <v-select
-              :items="getEntityTypes()"
+              :items="getEntityTypes"
               item-text="name"
               item-value="id"
               label="Entity Type"
@@ -136,27 +136,56 @@
           
       </v-row>
 
-       <v-row no-gutters class="d-flex justify-space-between">
+       <v-row no-gutters class="d-flex align-center">
         <v-col
           cols="12"
           sm="4"
+          
         >
             <v-select
             :items="fieldsItems"
             item-text="name"
-            item-value="field_id"
+            item-value="id"
             label="Field Name"
             @change="changeFieldSelected"
             dense
             outlined
           ></v-select>
           </v-col>
+           <v-col
+              cols="6"
+              sm="4">
+              <v-select
+                :items="getPeriods"
+                label="Period"
+                @change="changePeriodSelected"
+              >
+              </v-select>
+            </v-col>
       </v-row>
+    <!-- TODO add filter period select -->
+      <v-radio-group
+      v-model="enable_group"
+      label="Enable Group"
+      @change="changeEnabling"
+    >
+      <v-radio
+        label="Enable"
+        value="enable"
+      ></v-radio>
+      <v-radio
+        label="Disable"
+        value="disable"
+      ></v-radio>
+    </v-radio-group>
+    <!-- <v-row>
+     
+    </v-row> -->
 
     <!-- TODO create simple chart to apply just 1 field -->
       <v-row>
         <v-col cols="12" md="8">
-                  <ColumnChart :fieldname="fieldSelected.name"></ColumnChart>
+                  <ColumnChart ></ColumnChart>
         </v-col>
         <!-- <v-col cols="12" md="8">
                   <ColumnWithLabelsChart></ColumnWithLabelsChart>
@@ -172,6 +201,7 @@
 <script>
 
 import ColumnChart from '@/components/charts/ColumnChart.vue';
+import {mapActions, mapGetters} from 'vuex'
 
 
 export default {
@@ -179,24 +209,24 @@ export default {
   components: {
     ColumnChart,
   },
+  computed: {
+    ...mapGetters("fields",["getEntityTypes", "getIs_loding_entitytypes", "getFilters", "getPeriods"])
+    },
   data() {
     return {
       date_to: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
       date_from: '2021-02-01',
       menu1: false,
       menu2: false,
-
-      entityTypes:[
-        
-      ],
+      periods: [],
+      periodSelected: "monthly",
+      enable_group: "disable",
+      entityTypes: [],
       fieldsItems:[
         // default : empty array
       ],
-      fieldSelected:{
-        field_id: 11,
-        entitytype_id: 1,
-        name: 'parent_entity'
-      },
+      fieldSelected:{},
+      entityTypeSelected: null,
       render : false,
     
       menu: [
@@ -209,28 +239,45 @@ export default {
     };
   },
   methods: {
+    ...mapActions("fields", ['load_entitytypes']),
     changeFieldsItems(entityType_id){
-        // console.log(entityType_id)
-        // console.log(this.entityTypes);
-        const entityType = this.entityTypes.find(entityType => entityType.id === entityType_id ); 
-        // console.log("entityType.fields");
-        this.fieldsItems = entityType.fields; 
-        // console.log(entityType.fields);
+        const entityType = this.getEntityTypes.find(entityType => entityType.id === entityType_id ); 
+        this.entityTypeSelected = entityType;
+        this.fieldsItems = entityType._fields; 
     },
     changeFieldSelected(fieldId){
-      
-      console.log('FieldSelected id' + fieldId );
-      console.log('changeFieldSelected');
-      console.log(this.fieldsItems);
-
-      this.fieldSelected = this.fieldsItems.find(field => field.field_id === fieldId );
-      
-      console.log('Field selected ' + this.fieldSelected);
+      this.fieldSelected = this.fieldsItems.find(field => field.id === fieldId );
       this.render = ! this.render;
+      this.updateFilters();
+    },
+    changePeriodSelected(period){
+      this.periodSelected = period;
+      this.updateFilters();
+    },
+    changeEnabling(is_enable){
+      console.log(is_enable == "enable");      
+      this.updateFilters();    
     },
     updateChart(){
+      
       console.log('updatChart');
       // console.log(this.fieldSelected);
+    },
+    updateFilters(){
+
+      const filters = {
+        date_from: this.date_from,
+        date_to: this.date_to,
+        period: this.periodSelected,
+        enable_group: this.enable_group,
+        field_id: this.fieldSelected.id,
+        entityType_id: this.entityTypeSelected.id,
+      };
+      
+      this.$store.commit("fields/setFilters", filters );
+      console.log(filters);
+      
+
     },
     generateData(count, yrange) {
       let i = 0;
@@ -256,143 +303,23 @@ export default {
     return series;
     },
     // TODO create api GET /entityTypes
-    getEntityTypes(){
-      return [
-        {
-          id: 1,
-          name: 'Subject',
-          context:{
-            id: 1,
-            name: 'Subject_data'
-          },
-          // TODO fields of entityType
-          fields: [
-            {
-              field_id: 9,
-              entitytype_id: 1,
-              name: 'entity_storage_position#row',
-            },
-            {
-              field_id: 11,
-              entitytype_id: 1,
-              name: 'parent_entity',
-            },
-            {
-              field_id: 13,
-              entitytype_id: 1,
-              name: 'updated_at',
-            },
-            {
-              field_id: 16,
-              entitytype_id: 1,
-              name: 'Active',
-            },
-            {
-              field_id: 14,
-              entitytype_id: 1,
-              name: 'id',
-            },
-          ]
-        },
-        {
-          id: 2,
-          name: 'Visit',
-          context:{
-            id: 1,
-            name: 'Subject_data'
-          },
-          fields: [
-            {
-              field_id: 1,
-              entitytype_id: 2,
-              name: 'visit_date',
-            },
-            {
-              field_id: 2,
-              entitytype_id: 2,
-              name: 'entt_fk_subject',
-            },
-            {
-              field_id: 8,
-              entitytype_id: 2,
-              name: 'entity_fk_to_storage',
-            },
-            {
-              field_id: 11,
-              entitytype_id: 2,
-              name: 'parent_entity',
-            },
-            {
-              field_id: 12,
-              entitytype_id: 2,
-              name: 'created_at',
-            },
-            {
-              field_id: 10,
-              entitytype_id: 2,
-              name: 'entity_storage_position#column	',
-            },
-          ]
-        },
-        {
-          id: 3,
-          name: 'CRF',
-          context:{
-            id: 1,
-            name: 'Subject_data'
-          },
-        },
-        {
-          id: 4,
-          name: 'Sample',
-          context:{
-            id: 1,
-            name: 'Subject_data'
-          },
-        },
-        {
-          id: 5,
-          name: 'Freezer_-80',
-          context:{
-            id: 3,
-            name: 'Storage'
-          },
-        },
-        {
-          id: 6,
-          name: 'Shelf',
-          context:{
-            id: 3,
-            name: 'Storage'
-          },
-        },
-        {
-          id: 7,
-          name: 'Rack',
-          context:{
-            id: 3,
-            name: 'Storage'
-          },
-        },
-        {
-          id: 8,
-          name: 'Plate',
-          context:{
-            id: 3,
-            name: 'Storage'
-          },
-        },
 
-      ]
-
-    },
     // TODO create api GET /fields?entityTpe='Subject'
     getFieldsNamesByEntityType() {
       
-    }
+    },
   },
   created() {
-    this.entityTypes = this.getEntityTypes();
+  
+    this.load_entitytypes();
+    console.log("this.entityTypes");
+    console.log(this.getEntityTypes);
+
+    
+    // TODO check if authenticated or logout()
   },
+  mounted(){
+    // this.loadAllEntityTypes();
+  }
 };
 </script>
