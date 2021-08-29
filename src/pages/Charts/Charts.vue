@@ -210,7 +210,9 @@ export default {
     ColumnChart,
   },
   computed: {
-    ...mapGetters("fields",["getEntityTypes", "getIs_loding_entitytypes", "getFilters", "getPeriods"])
+    ...mapGetters("fields",
+        ["getEntityTypes", "getIs_loding_entitytypes", "getFilters", "getPeriods"]
+    )
     },
   data() {
     return {
@@ -222,9 +224,7 @@ export default {
       periodSelected: "monthly",
       enable_group: "disable",
       entityTypes: [],
-      fieldsItems:[
-        // default : empty array
-      ],
+      fieldsItems:[],
       fieldSelected:{},
       entityTypeSelected: null,
       render : false,
@@ -254,14 +254,12 @@ export default {
       this.periodSelected = period;
       this.updateFilters();
     },
-    changeEnabling(is_enable){
-      console.log(is_enable == "enable");      
+    changeEnabling(){
       this.updateFilters();    
     },
     updateChart(){
       
       console.log('updatChart');
-      // console.log(this.fieldSelected);
     },
     updateFilters(){
 
@@ -302,24 +300,9 @@ export default {
       }
     return series;
     },
-    // TODO create api GET /entityTypes
-
-    // TODO create api GET /fields?entityTpe='Subject'
-    getFieldsNamesByEntityType() {
-      
-    },
   },
   created() {
-  
     this.load_entitytypes();
-    console.log("this.entityTypes");
-    console.log(this.getEntityTypes);
-
-    
-    // TODO check if authenticated or logout()
   },
-  mounted(){
-    // this.loadAllEntityTypes();
-  }
 };
 </script>
