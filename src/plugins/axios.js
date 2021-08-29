@@ -7,7 +7,8 @@ import axios from "axios";
 // axios.defaults.baseURL = process.env.baseURL || process.env.apiUrl || '';
 
 const user = JSON.parse(localStorage.getItem("user"));
-if(user.access_token){
+const access_token = user ? user.access_token : null;
+if(access_token){
   axios.defaults.headers.common["Authorization"] = `Bearer ${user.access_token}`;
 }
 
@@ -17,7 +18,7 @@ let config = {
   baseURL:
     process.env.NODE_ENV === "production"
       ? "https://di-statistics.herokuapp.com"
-      : "http://127.0.0.1:8000/api",
+      : "http://127.0.0.1:8008/api",
   timeout: 60 * 1000, // Timeout
   withCredentials: false, // Check cross-site Access-Control
 };
