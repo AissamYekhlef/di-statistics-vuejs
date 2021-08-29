@@ -26,22 +26,14 @@
                       <v-container>
                         <v-row class="flex-column">
                           <v-col>
-                            <p class="login-slogan display-2 text-center font-weight-medium my-10">Good Morning, User</p>
-                            <v-btn height="45" block color="white" elevation="0" class="google text-capitalize">
-                              <v-img src="@/assets/google.svg" max-width="30" class="mr-4"></v-img>
-                              Sign in with Google</v-btn>
-                          </v-col>
-                          <v-col cols="12" class="d-flex align-center my-8">
-                            <v-divider></v-divider>
-                            <span class="px-5"> or </span>
-                            <v-divider></v-divider>
+                            <p class="login-slogan display-2 text-center font-weight-medium my-2">Good Morning</p>
                           </v-col>
                           <v-form>
                             <v-col>
                               <v-text-field
                                   v-model="email"
                                   :rules="emailRules"
-                                  value="admin@flatlogic.com"
+                                  value="admin@admin.com"
                                   label="Email Address"
                                   required
                               ></v-text-field>
@@ -135,7 +127,7 @@
             </v-col>
             <v-col cols="12" class="d-flex justify-center">
               <v-footer>
-                <div class="primary--text">© 2021 <a href="https://di-statistics.com/" class="text-decoration-none">Di Statistics</a>, LLC. All rights reserved.</div>
+                <div class="primary--text">© 2021 <a href="https://di-statistics.com/" class="text-decoration-none">Di Statistics - DiData</a>, LLC. All rights reserved.</div>
               </v-footer>
             </v-col>
           </v-row>
