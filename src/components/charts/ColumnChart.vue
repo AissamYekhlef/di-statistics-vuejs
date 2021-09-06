@@ -12,7 +12,7 @@
 
 <script>
 import Vue from "vue";
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 import VueApexCharts from "vue-apexcharts";
 Vue.use(VueApexCharts);
@@ -20,17 +20,17 @@ Vue.component("apexchart", VueApexCharts);
 
 export default {
   name: "ColumnChart",
-  computed: mapGetters("fields", ["getSeries","getFilters","getEntityTypes"]),
+  computed: mapGetters("fields", ["getSeries","getFilters","getEntityTypes", "getCategories", "getFieldSelected"]),
   data: function() {
     return {
       seriesDB:{
         name: 'field name',
         data: [44, 55,  57, 56, 61, 58, 63, 60, 66],
-        categories: ['ggg', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct']
+        categories: ['feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct']
       },
       series: [
 
-          ],  
+      ],  
       chartOptions: {
             chart: {
               type: 'bar',
@@ -73,24 +73,23 @@ export default {
     };
   }, 
   methods:{
-    // ...mapGetters("fields/getFilters"),
+    ...mapActions("fields", ['updateChartSeries']),
     updateChart(){
-      console.log("this.getFilters");
-      console.log(this.getFilters);
-
-
+      this.updateChartSeries();
+      
       this.chartOptions = {
-            ...this.chartOptions,
-            xaxis: {
-              categories: this.getSeries,
-            },
-          }
+      ...this.chartOptions,
+      xaxis: {
+        categories: this.getCategories,
+      },
+      }
       this.series = [{
-        name: 'storage_row',
-        data: [15, 25,  10, 56, 40, 70, 11, 23, 50]
-       }];   // return chartOptions;
-      console.log(this.getFilters);
+        name: this.getFieldSelected.name,
+        data: this.getSeries
+      }];   // return chartOptions;
+      
 
+      console.log(this.getSeries);
 
     }
   },

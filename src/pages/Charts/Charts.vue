@@ -2,7 +2,7 @@
   <v-container fluid>
     <div class="charts-page">
       <v-row no-gutters class="d-flex justify-space-between mt-10 mb-6">
-        <h1 class="page-title">Charts</h1>
+        <h1 class="page-title">Charts - <span>Entities and Fields</span></h1>
         <v-menu offset-y>
           <template v-slot:activator="{ on, attrs }">
             <v-btn
@@ -42,6 +42,7 @@
             </template>
             <v-date-picker
               v-model="date_from"
+              @change="changeDateFrom"
               no-title
               scrollable
             >
@@ -91,6 +92,7 @@
             </template>
             <v-date-picker
               v-model="date_to"
+              @change="changeDateTo"
               no-title
               scrollable
             >
@@ -239,7 +241,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions("fields", ['load_entitytypes']),
+    ...mapActions("fields", ['load_entitytypes', 'updateChartSeries']),
     changeFieldsItems(entityType_id){
         const entityType = this.getEntityTypes.find(entityType => entityType.id === entityType_id ); 
         this.entityTypeSelected = entityType;
@@ -247,7 +249,14 @@ export default {
     },
     changeFieldSelected(fieldId){
       this.fieldSelected = this.fieldsItems.find(field => field.id === fieldId );
+      this.$store.commit('fields/setFieldSelected', this.fieldSelected);
       this.render = ! this.render;
+      this.updateFilters();
+    },
+    changeDateFrom(){
+      this.updateFilters();
+    },
+    changeDateTo(){
       this.updateFilters();
     },
     changePeriodSelected(period){
@@ -269,13 +278,12 @@ export default {
         period: this.periodSelected,
         enable_group: this.enable_group,
         field_id: this.fieldSelected.id,
-        entityType_id: this.entityTypeSelected.id,
+        entitytype_id: this.entityTypeSelected.id,
       };
       
       this.$store.commit("fields/setFilters", filters );
-      console.log(filters);
-      
-
+      this.updateChartSeries();
+    
     },
     generateData(count, yrange) {
       let i = 0;
