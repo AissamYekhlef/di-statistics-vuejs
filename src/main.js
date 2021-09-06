@@ -7,7 +7,7 @@ import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
 
 Vue.use(Toast);
-
+Vue.use(require('vue-moment'));
 
 Vue.config.productionTip = false
 
