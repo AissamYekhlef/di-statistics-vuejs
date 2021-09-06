@@ -51,6 +51,22 @@ const actions = {
 
   logout: ({ commit }) => {
     commit(AUTH_LOGOUT);
+  },
+
+  check: () => {
+    return axios
+    .post("auth/me")
+    .catch(function (data) {
+      if(data) {
+        // alert(data);
+  console.log(data);
+          
+        // commit(AUTH_LOGOUT);
+        // window.location.href = '/login';
+      }else { 
+        return data;
+      }
+    });
   }
 };
 

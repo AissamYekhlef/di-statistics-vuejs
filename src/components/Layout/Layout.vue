@@ -15,9 +15,17 @@
     import Footer from "@/components/Footer/Footer";
     import './Layout.scss';
 
+    import { mapActions } from "vuex";
+
     export default {
         name: 'Layout',
         components: {Footer, Header, Sidebar },
+        methods: {
+            ...mapActions("auth", ["check"]),
+        },
+        created() {
+            this.check();
+        }
     };
 </script>
 
