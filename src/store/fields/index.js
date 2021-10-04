@@ -17,6 +17,7 @@ const state = {
     entityTypeSelected: null,
     entityTypes: [],
     series: [],
+    fieldStatistics: [],
     is_loding_entitytypes: false,
     periods: [
       'hourly',
@@ -36,12 +37,14 @@ const getters = {
   getPeriods: (state) => state.periods,
   getCategories: (state) => state.categories,
   getFieldSelected: (state) => state.fieldSelected,
+  getFieldStatistics: (state) => state.fieldStatistics
 };
 
 const mutations = {
   setFilters: (state, filters) => state.filters = filters,
   setEntitytypes: (state, entityTypes) => state.entityTypes = entityTypes,
   setSeries: (state, series) => state.series = series,
+  setFieldStatistics: (state, fieldStatistics) => state.fieldStatistics = fieldStatistics,
   setCategories: (state, categories) => state.categories = categories,
   setFieldSelected: (state, fieldSelected) => state.fieldSelected = fieldSelected,
   setEntityTypeSelected: (state, entityTypeSelected) => state.entityTypeSelected = entityTypeSelected,
@@ -82,6 +85,10 @@ const actions = {
         }
         if(data.period == "weekly"){
             categories = data.series.map(({week, month, year}) =>  "w " + week + " | " + month + " - " + year);
+        }
+        if(data.field_statistics != null){
+          const fieldStatistics = data.field_statistics.map(({count}) => count);
+          commit('setFieldStatistics', fieldStatistics);
         }
         
         commit('setSeries', series);

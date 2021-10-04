@@ -117,13 +117,14 @@
         <v-spacer></v-spacer>
         
       </v-row>
-      <v-row no-gutters class="d-flex justify-space-between">
+      <v-row class="d-flex justify-space-between">
         <v-col
           cols="12"
           sm="4"
         >
         <!-- TODO add context name prefix for item-text -->
           <template>
+
             <v-select
               :items="getEntityTypes"
               item-text="name"
@@ -170,6 +171,7 @@
       v-model="enable_group"
       label="Enable Group"
       @change="changeEnabling"
+      v-if="this.fieldSelected.fieldtype == 'FIXED'"
     >
       <v-radio
         label="Enable"
@@ -189,12 +191,17 @@
         <v-col cols="12" md="8">
                   <ColumnChart ></ColumnChart>
         </v-col>
-        <!-- <v-col cols="12" md="8">
+        <v-col cols="12" md="4"
+        v-if="enable_group == 'enable'"
+        >
+                  <DonutChart ></DonutChart>
+        </v-col>
+        <v-col cols="12" md="8">
                   <ColumnWithLabelsChart></ColumnWithLabelsChart>
         </v-col>
         <v-col cols="12" md="8">
                   <TestColumn></TestColumn>
-        </v-col> -->
+        </v-col>
       </v-row>
     </div>
   </v-container>
@@ -203,6 +210,9 @@
 <script>
 
 import ColumnChart from '@/components/charts/ColumnChart.vue';
+import DonutChart from '@/components/charts/DonutChart.vue';
+import ColumnWithLabelsChart from '@/components/charts/ColumnWithLabelsChart.vue';
+
 import {mapActions, mapGetters} from 'vuex'
 
 
@@ -210,6 +220,8 @@ export default {
   name: 'Charts',
   components: {
     ColumnChart,
+    DonutChart,
+    ColumnWithLabelsChart
   },
   computed: {
     ...mapGetters("fields",
@@ -251,6 +263,16 @@ export default {
       this.fieldSelected = this.fieldsItems.find(field => field.id === fieldId );
       this.$store.commit('fields/setFieldSelected', this.fieldSelected);
       this.render = ! this.render;
+
+      if(this.fieldSelected.fieldtype === "FIXED"){
+        this.enable_group = "enable";
+        console.log("Group : " + this.enable_group);
+      }else {
+        this.enable_group = "disable";
+      }
+
+      console.log("this.fieldSelected.fieldtype : ");
+      console.log(this.fieldSelected.fieldtype);
       this.updateFilters();
     },
     changeDateFrom(){

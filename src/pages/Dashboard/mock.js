@@ -116,12 +116,25 @@ export default {
         enabled: false
       },
       colors: [config.light.primary, config.light.secondary, config.light.success, config.light.warning],
-      labels: ["Group A", "Group B", "Group C", "Group D"],
+      labels: ["Freezer-80", "Sample", "Visit", "Others"],
       legend: {
 
       }
     },
-    series: [400, 300, 300, 200],
+    series: [4, 3, 3, 2],
+  },
+  apexPie2: {
+    options: {
+      dataLabels: {
+        enabled: false
+      },
+      colors: [config.light.primary, config.light.secondary, config.light.success, config.light.warning],
+      labels: ["entity_barcode", "storage_name", "visit_date", "Others"],
+      legend: {
+
+      }
+    },
+    series: [4, 3, 3, 2],
   },
   apexArea1: {
     options: {
@@ -196,7 +209,7 @@ export default {
   mainApexArea: {
     options: {
       chart: {
-        width: '100%',
+        width: '1%',
         toolbar: {
           show: false
         },
@@ -256,53 +269,54 @@ export default {
     },
     series: [
       {
-        name: 'Tablet',
+        name: 'Entitytype',
         type: 'line',
-        data: [3100, 4000, 2800, 5100, 4200, 6090, 5100, 3100, 4000, 2800, 5100, 4200, 6090, 5100]
+        data: [31, 40, 28, 51, 42, 60, 51, 31, 40, 28, 51, 42, 60, 51]
       },
       {
-        name: 'Mobile',
+        name: 'Entity',
         type: 'line',
-        data: [1100, 3200, 4500, 3020, 3400, 5200, 4100, 1100, 3200, 4500, 3020, 3400, 5200, 4100]
+        data: [11, 32, 45, 30, 34, 52, 41, 11, 32, 45, 30, 34, 52, 41]
       },
       {
-        name: 'Desktop',
-        type: 'area',
-        data: [2100, 2000, 1800, 4100, 1200, 3600, 6100, 2100, 2000, 1800, 4100, 1200, 3600, 6100]
+        name: 'Field',
+        type: 'line',
+        data: [21, 20, 18, 41, 12, 36, 61, 21, 20, 18, 41, 12, 36, 61]
       }
     ],
     series2: [
       {
         name: 'Tablet',
         type: 'line',
-        data: [2100, 3000, 2800, 6100, 5200, 5090, 4100, 2100, 2000, 3800, 6100, 5200, 7090, 6100]
+        data: [21, 30, 28, 61, 52, 50, 41, 21, 20, 38, 61, 52, 7090, 61]
       },
       {
         name: 'Mobile',
         type: 'line',
-        data: [1100, 3200, 4500, 3020, 3400, 5200, 4100, 1100, 3200, 4500, 3020, 3400, 5200, 4100]
+        data: [11, 32, 45, 30, 34, 52, 41, 11, 32, 45, 30, 34, 52, 41]
       },
       {
         name: 'Desktop',
         type: 'area',
-        data: [2100, 2000, 1800, 4100, 1200, 3600, 6100, 2100, 2000, 1800, 4100, 1200, 3600, 6100]
+        data: [21, 20, 18, 41, 12, 36, 61, 21, 20, 18, 41, 12, 36, 61]
       }
     ],
     series3: [
       {
         name: 'Tablet',
         type: 'line',
-        data: [4100, 5000, 4800, 8100, 7200, 7090, 6100, 4100, 4000, 5800, 8100, 7200, 9090, 8100]
+        data: [41, 50, 48, 81, 72, 70, 61, 41, 40, 58, 81, 72, 90, 81]
       },
       {
         name: 'Mobile',
         type: 'line',
-        data: [4100, 5200, 7500, 6020, 6400, 8200, 7100, 4100, 6200, 7500, 6020, 6400, 8200, 7100]
+        data: [41, 52, 75, 60, 64, 82, 71, 41, 62, 75, 60, 64, 82, 71]
       },
       {
         name: 'Desktop',
         type: 'area',
-        data: [5100, 5000, 4800, 7100, 4200, 6600, 9100, 5100, 5000, 4800, 7100, 4200, 4600, 9100]
+
+        data: [51, 50, 48, 71, 42, 66, 91, 51, 50, 48, 71, 42, 46, 91]
       }
     ],
   },

@@ -25,7 +25,7 @@ export default {
     return {
       seriesDB:{
         name: 'field name',
-        data: [44, 55,  57, 56, 61, 58, 63, 60, 66],
+        data: [44, 55, 57, 56, 61, 58, 63, 60, 66],
         categories: ['feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct']
       },
       series: [
@@ -34,7 +34,14 @@ export default {
       chartOptions: {
             chart: {
               type: 'bar',
-              height: 350
+              height: 250,
+                toolbar:{
+                  export: {
+                    csv: {
+                      headerCategory: 'Date',
+                    }
+                  }
+                }
             },
             plotOptions: {
               bar: {
@@ -84,7 +91,7 @@ export default {
       },
       }
       this.series = [{
-        name: this.getFieldSelected.name,
+        name: 'Number_entities',
         data: this.getSeries
       }];   // return chartOptions;
       

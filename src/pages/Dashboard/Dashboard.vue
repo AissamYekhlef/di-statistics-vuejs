@@ -19,7 +19,7 @@
         <v-col lg="3" sm="6" md="5" cols="12">
           <v-card class="mx-1 mb-1">
             <v-card-title class="pa-6 pb-3">
-              <p>Visits Today</p>
+              <p>New Users Today</p>
               <v-spacer></v-spacer>
               <v-menu>
                 <template v-slot:activator="{ on, attrs }">
@@ -44,7 +44,7 @@
                   <span
                     class="font-weight-medium card-dark-grey"
                     style="font-size: 24px"
-                    >12, 678</span
+                    >15</span
                   >
                 </v-col>
                 <v-col cols="6">
@@ -59,92 +59,31 @@
               </v-row>
               <v-row no-gutters class="justify-space-between pb-3">
                 <v-col cols="5">
-                  <div class="card-light-grey">Registrations</div>
+                  <div class="card-light-grey">Researchers</div>
                   <div class="text-h6 card-dark-grey font-weight-regular">
-                    860
+                    13
                   </div>
                 </v-col>
                 <v-col cols="3">
-                  <div class="card-light-grey">Sign Out</div>
+                  <div class="card-light-grey">Admins</div>
                   <div class="text-h6 card-dark-grey font-weight-regular">
-                    32
+                    2
                   </div>
                 </v-col>
                 <v-col cols="4" xl="2">
-                  <div class="text-right card-light-grey">Rate</div>
+                  <div class="text-right card-light-grey">Sign In</div>
                   <div
                     class="text-right text-h6 card-dark-grey font-weight-regular"
                   >
-                    3.25%
+                    35 %
                   </div>
                 </v-col>
               </v-row>
             </v-card-text>
           </v-card>
         </v-col>
-        <v-col lg="3" sm="6" md="7" cols="12">
-          <v-card class="mx-1 mb-1">
-            <v-card-title class="pa-6 pb-3">
-              <p>App Performance</p>
-              <v-spacer></v-spacer>
-              <v-menu>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn icon v-bind="attrs" v-on="on">
-                    <v-icon color="textColor">mdi-dots-vertical</v-icon>
-                  </v-btn>
-                </template>
-                <v-list>
-                  <v-list-item
-                    v-for="(item, i) in mock.menu"
-                    :key="i"
-                    @click="() => {}"
-                  >
-                    <v-list-item-title>{{ item }}</v-list-item-title>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-            </v-card-title>
-            <v-card-text class="pa-6 pt-0">
-              <v-row no-gutters class="pb-5">
-                <div class="mr-4">
-                  <v-icon color="primary" class="ml-n2">
-                    mdi-circle-medium
-                  </v-icon>
-                  <span class="card-light-grey">Integration</span>
-                </div>
-                <div>
-                  <v-icon color="warning"> mdi-circle-medium </v-icon>
-                  <span class="card-light-grey">SDK</span>
-                </div>
-              </v-row>
-              <v-row no-gutters class="pb-3">
-                <v-col>
-                  <div class="text-h6 card-light-grey font-weight-regular">
-                    Integration
-                  </div>
-                  <v-progress-linear
-                    :value="value"
-                    background-color="#ececec"
-                    color="primary"
-                  ></v-progress-linear>
-                </v-col>
-              </v-row>
-              <v-row no-gutters class="pb-1">
-                <v-col>
-                  <div class="text-h6 card-light-grey font-weight-regular">
-                    SDK
-                  </div>
-                  <v-progress-linear
-                    :value="value2"
-                    background-color="#ececec"
-                    color="warning"
-                  ></v-progress-linear>
-                </v-col>
-              </v-row>
-            </v-card-text>
-          </v-card>
-        </v-col>
-        <v-col lg="3" sm="6" md="7" cols="12">
+        
+        <!-- <v-col lg="3" sm="6" md="7" cols="12">
           <v-card class="mx-1 mb-1" style="min-height: 228px">
             <v-card-title class="pa-6 pb-3">
               <p>Server Overview</p>
@@ -229,11 +168,11 @@
               </v-row>
             </v-card-text>
           </v-card>
-        </v-col>
+        </v-col> -->
         <v-col lg="3" sm="6" md="5" cols="12">
           <v-card class="mx-1 mb-1" style="height: 228px">
             <v-card-title class="flex-nowrap pa-6 pb-3">
-              <p class="text-truncate">Revenue Breakdown</p>
+              <p class="text-truncate">Top used Fields</p>
               <v-spacer></v-spacer>
               <v-menu>
                 <template v-slot:activator="{ on, attrs }">
@@ -252,7 +191,44 @@
                 </v-list>
               </v-menu>
             </v-card-title>
-            <v-card-text class="pa-6 pt-0 mb-1">
+            <v-card-text class="pa-1 pt-0 mb-1">
+              <v-row no-gutters>
+                <v-col cols="12">
+                  <ApexChart
+                    height="124"
+                    type="donut"
+                    class="mt-1"
+                    :options="mock.apexPie2.options"
+                    :series="generatePieSeries()"
+                  ></ApexChart>
+                </v-col>
+              </v-row>
+            </v-card-text>
+          </v-card>
+        </v-col>
+        <v-col lg="3" sm="6" md="5" cols="12">
+          <v-card class="mx-1 mb-1" style="height: 228px">
+            <v-card-title class="flex-nowrap pa-6 pb-3">
+              <p class="text-truncate">Top Entitytypes</p>
+              <v-spacer></v-spacer>
+              <v-menu>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn icon v-bind="attrs" v-on="on">
+                    <v-icon color="textColor">mdi-dots-vertical</v-icon>
+                  </v-btn>
+                </template>
+                <v-list>
+                  <v-list-item
+                    v-for="(item, i) in mock.menu"
+                    :key="i"
+                    @click="() => {}"
+                  >
+                    <v-list-item-title>{{ item }}</v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+            </v-card-title>
+            <v-card-text class="pa-1 pt-0 mb-1">
               <v-row no-gutters>
                 <v-col cols="12">
                   <ApexChart
@@ -263,6 +239,41 @@
                     :series="generatePieSeries()"
                   ></ApexChart>
                 </v-col>
+              </v-row>
+            </v-card-text>
+          </v-card>
+        </v-col>
+        <v-col lg="3" sm="6" md="7" cols="12">
+          <v-card class="mx-1 mb-1">
+            <v-card-title class="pa-6 pb-3">
+              <p>Entities Today</p>
+              <v-spacer></v-spacer>
+              <v-menu>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn icon v-bind="attrs" v-on="on">
+                    <v-icon color="textColor">mdi-dots-vertical</v-icon>
+                  </v-btn>
+                </template>
+                <v-list>
+                  <v-list-item
+                    v-for="(item, i) in mock.menu"
+                    :key="i"
+                    @click="() => {}"
+                  >
+                    <v-list-item-title>{{ item }}</v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+            </v-card-title>
+            <v-card-text class="pa-6 pt-0">
+              <v-row no-gutters class="pb-5">
+                + 250 Entity
+              </v-row>
+              <v-row no-gutters class="pb-3">
+                
+              </v-row>
+              <v-row no-gutters class="pb-1">
+
               </v-row>
             </v-card-text>
           </v-card>
@@ -290,19 +301,19 @@
                   ><span
                     class="card-dark-grey font-weight-regular mr-3"
                     style="font-size: 18px"
-                    >Tablet</span
+                    >Entitytype</span
                   >
                   <v-icon size="18" color="primary">mdi-circle-medium</v-icon
                   ><span
                     class="card-dark-grey font-weight-regular mr-3"
                     style="font-size: 18px"
-                    >Mobile</span
+                    >Entity</span
                   >
                   <v-icon size="18" color="#B1BCFF">mdi-circle-medium</v-icon
                   ><span
                     class="card-dark-grey font-weight-regular"
                     style="font-size: 18px"
-                    >Desktop</span
+                    >Field</span
                   >
                 </v-col>
                 <v-col cols="5" sm="2" md="2" lg="1" offset-lg="1">
