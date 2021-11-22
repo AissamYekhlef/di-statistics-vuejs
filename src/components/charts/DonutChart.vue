@@ -6,7 +6,7 @@
        >
       Refresh chart
        </v-btn>
-        <apexchart type="donut" height="350" :options="chartOptions" :series="getFieldStatistics" v-model="getFieldStatistics"></apexchart>
+        <apexchart type="donut" height="350" :options="{...chartOptions, labels: getFieldCategories}" :series="getFieldStatistics" v-model="getFieldStatistics"></apexchart>
       </div>
 </template>
 
@@ -20,7 +20,8 @@ Vue.component("apexchart", VueApexCharts);
 
 export default {
   name: "DonutChart",
-  computed: mapGetters("fields", ["getSeries","getFilters","getEntityTypes", "getCategories", "getFieldSelected","getFieldStatistics"]),
+  computed: mapGetters("fields", 
+  ["getSeries","getFilters","getEntityTypes", "getCategories", "getFieldSelected","getFieldStatistics","getFieldCategories"]),
   data: function() {
     return {
       series: [
@@ -32,7 +33,7 @@ export default {
             enabled: true,
         },
         // colors: [config.light.primary, config.light.secondary, config.light.success, config.light.warning],
-        labels: ["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"],
+        // labels: this.getFieldCategories,
         legend: {
 
         }
@@ -42,26 +43,17 @@ export default {
   methods:{
     ...mapActions("fields", ['updateChartSeries']),
     updateChart(){
-        // window.setInterval(
-            this.updateChartSeries();
-        // , 2000);
-      
-      
-    //   this.series =  [22,55,66,33,33,55,88,77];
+
       this.series =  this.getFieldStatistics;
-    console.log(this.getFieldStatistics);
+      this.chartOptions = {
+        ...this.chartOptions,
+        labels: this.getFieldCategories
+      };
     
+      this.updateChartSeries();
+      console.log(this.getFieldStatistics);
+      
     },  
-    // updateFieldStatDynamicly(){
-
-    // }
-
-    
-  },
-  mounted(){
-    // setInterval(() => this.updateChart(), 5000, this.updateDynamicly); 
-    
-    
   }
 };
 

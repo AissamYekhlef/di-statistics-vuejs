@@ -14,9 +14,12 @@ const state = {
       entitytype_id: null,
     },
     fieldSelected: null,
+    fieldCategories: [],
     entityTypeSelected: null,
+    entityTypeSelectedToCompare: null,
     entityTypes: [],
     series: [],
+    seriesToCompare: [],
     fieldStatistics: [],
     is_loding_entitytypes: false,
     periods: [
@@ -27,28 +30,37 @@ const state = {
       'yearly',
     ],
     categories: [],
+    categoriesToCompare: [],
 };
 
 const getters = {
   getFilters: (state) => state.filters,
   getSeries: (state) => state.series,
+  getSeriesToCompare: (state) => state.seriesToCompare,
   getEntityTypes: (state) => state.entityTypes,
   getIs_loding_entitytypes: (state) => state.is_louding_entitytypes,
   getPeriods: (state) => state.periods,
   getCategories: (state) => state.categories,
+  getCategoriesToCompare: (state) => state.categoriesToCompare,
+  getEntityTypeSelected: (state) => state.entityTypeSelected,
   getFieldSelected: (state) => state.fieldSelected,
-  getFieldStatistics: (state) => state.fieldStatistics
+  getFieldStatistics: (state) => state.fieldStatistics,
+  getFieldCategories: (state) => state.fieldCategories,
 };
 
 const mutations = {
   setFilters: (state, filters) => state.filters = filters,
   setEntitytypes: (state, entityTypes) => state.entityTypes = entityTypes,
   setSeries: (state, series) => state.series = series,
+  setSeriesToCompare: (state, series) => state.seriesToCompare = series,
   setFieldStatistics: (state, fieldStatistics) => state.fieldStatistics = fieldStatistics,
   setCategories: (state, categories) => state.categories = categories,
+  setCategoriesToCompare: (state, categories) => state.categoriesToCompare = categories,
   setFieldSelected: (state, fieldSelected) => state.fieldSelected = fieldSelected,
   setEntityTypeSelected: (state, entityTypeSelected) => state.entityTypeSelected = entityTypeSelected,
+  setEntityTypeSelectedToCompare: (state, entityTypeSelectedToCompare) => state.entityTypeSelectedToCompare = entityTypeSelectedToCompare,
   setIs_loding_entitytypes: (state, is_loding_entitytypes) => state.is_loding_entitytypes = is_loding_entitytypes ,
+  setFieldCategories: (state, fieldCategories) => state.fieldCategories = fieldCategories ,
 };
 
 const actions = {
@@ -88,11 +100,21 @@ const actions = {
         }
         if(data.field_statistics != null){
           const fieldStatistics = data.field_statistics.map(({count}) => count);
+          const fieldCategories = data.field_statistics.map(({value}) => value);
           commit('setFieldStatistics', fieldStatistics);
+          commit('setFieldCategories', fieldCategories);
+        }
+        console.log("state.series.count : " );
+        console.log(state.series.length > 0);
+        
+        if(state.series.length > 0){
+          commit('setSeriesToCompare', series);
+          commit('setCategoriesToCompare', categories);
+        }else{
+          commit('setSeries', series);
+          commit('setCategories', categories);
         }
         
-        commit('setSeries', series);
-        commit('setCategories', categories);
                 
         return data;
       });

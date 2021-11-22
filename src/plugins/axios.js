@@ -18,7 +18,7 @@ let config = {
   baseURL:
     process.env.NODE_ENV === "production"
       ? "https://di-statistics.herokuapp.com"
-      : "http://127.0.0.1:8008/api",
+      : "http://192.168.1.3:8008/api",
   timeout: 60 * 1000, // Timeout
   withCredentials: false, // Check cross-site Access-Control
 };

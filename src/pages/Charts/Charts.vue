@@ -117,20 +117,34 @@
         <v-spacer></v-spacer>
         
       </v-row>
-      <v-row class="d-flex justify-space-between">
+      <v-row class="d-flex">
         <v-col
           cols="12"
           sm="4"
         >
-        <!-- TODO add context name prefix for item-text -->
           <template>
-
             <v-select
               :items="getEntityTypes"
               item-text="name"
               item-value="id"
               label="Entity Type"
               @change="changeFieldsItems"
+              dense
+              outlined
+            ></v-select>
+          </template>
+        </v-col>
+         <v-col
+          cols="12"
+          sm="4"
+        >
+          <template>
+            <v-select
+              :items="getEntityTypes"
+              item-text="name"
+              item-value="id"
+              label="Entity Type To Compare"
+              @change="changeEntitytypesToCompare"
               dense
               outlined
             ></v-select>
@@ -147,7 +161,7 @@
         >
             <v-select
             :items="fieldsItems"
-            item-text="name"
+            item-text="label"
             item-value="id"
             label="Field Name"
             @change="changeFieldSelected"
@@ -165,13 +179,16 @@
               >
               </v-select>
             </v-col>
+            
       </v-row>
     <!-- TODO add filter period select -->
       <v-radio-group
       v-model="enable_group"
       label="Enable Group"
       @change="changeEnabling"
-      v-if="this.fieldSelected.fieldtype == 'FIXED'"
+      v-if="this.fieldSelected.fieldtype == 'FIXED' || 
+            this.fieldSelected.fieldtype == 'FOREIGN' || 
+            this.fieldSelected.fieldtype == 'BASIC'"
     >
       <v-radio
         label="Enable"
@@ -192,16 +209,15 @@
                   <ColumnChart ></ColumnChart>
         </v-col>
         <v-col cols="12" md="4"
-        v-if="enable_group == 'enable'"
+        v-if="enable_group == 'enable' && 
+        (this.fieldSelected.fieldtype == 'FIXED' ||
+         this.fieldSelected.fieldtype == 'FOREIGN' ||
+         this.fieldSelected.fieldtype == 'BASIC'
+         )"
         >
                   <DonutChart ></DonutChart>
         </v-col>
-        <v-col cols="12" md="8">
-                  <ColumnWithLabelsChart></ColumnWithLabelsChart>
-        </v-col>
-        <v-col cols="12" md="8">
-                  <TestColumn></TestColumn>
-        </v-col>
+      
       </v-row>
     </div>
   </v-container>
@@ -211,9 +227,9 @@
 
 import ColumnChart from '@/components/charts/ColumnChart.vue';
 import DonutChart from '@/components/charts/DonutChart.vue';
-import ColumnWithLabelsChart from '@/components/charts/ColumnWithLabelsChart.vue';
 
 import {mapActions, mapGetters} from 'vuex'
+// import axios from '@/plugins/axios'
 
 
 export default {
@@ -221,7 +237,6 @@ export default {
   components: {
     ColumnChart,
     DonutChart,
-    ColumnWithLabelsChart
   },
   computed: {
     ...mapGetters("fields",
@@ -241,6 +256,7 @@ export default {
       fieldsItems:[],
       fieldSelected:{},
       entityTypeSelected: null,
+      entityTypeSelectedToCompare: null,
       render : false,
     
       menu: [
@@ -249,7 +265,7 @@ export default {
         // 'Delete',
         'Print'
       ],
-     
+
     };
   },
   methods: {
@@ -258,18 +274,30 @@ export default {
         const entityType = this.getEntityTypes.find(entityType => entityType.id === entityType_id ); 
         this.entityTypeSelected = entityType;
         this.fieldsItems = entityType._fields; 
+        this.$store.commit('fields/setEntityTypeSelected', entityType);
+    },
+    changeFieldsItemsToCompare(entityType_id){
+        const entityType = this.getEntityTypes.find(entityType => entityType.id === entityType_id ); 
+        this.entityTypeSelectedToCompare = entityType;
+
+      //   axios
+      // .get("/statistics/fields/" + this.getFilters.field_id, {params: this.getFilters}
+
+      // ).then( ({ data }) => {
+
+      // });
     },
     changeFieldSelected(fieldId){
       this.fieldSelected = this.fieldsItems.find(field => field.id === fieldId );
       this.$store.commit('fields/setFieldSelected', this.fieldSelected);
       this.render = ! this.render;
 
-      if(this.fieldSelected.fieldtype === "FIXED"){
-        this.enable_group = "enable";
-        console.log("Group : " + this.enable_group);
-      }else {
-        this.enable_group = "disable";
-      }
+      // if(this.fieldSelected.fieldtype === "FIXED"){
+      //   this.enable_group = "enable";
+      //   console.log("Group : " + this.enable_group);
+      // }else {
+      //   this.enable_group = "disable";
+      // }
 
       console.log("this.fieldSelected.fieldtype : ");
       console.log(this.fieldSelected.fieldtype);
@@ -291,6 +319,22 @@ export default {
     updateChart(){
       
       console.log('updatChart');
+    },
+    changeEntitytypesToCompare(entityType_id){
+        const entityType = this.getEntityTypes.find(entityType => entityType.id === entityType_id ); 
+        this.entityTypeSelectedToCompare = entityType;
+      const filters = {
+        date_from: this.date_from,
+        date_to: this.date_to,
+        period: this.periodSelected,
+        enable_group: this.enable_group,
+        field_id: 1,
+        entitytype_id: this.entityTypeSelectedToCompare.id,
+      };
+      
+      this.$store.commit("fields/setFilters", filters );
+        this.$store.commit('fields/setEntityTypeSelected', entityType);
+      this.updateChartSeries();
     },
     updateFilters(){
 

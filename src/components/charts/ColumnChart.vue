@@ -6,6 +6,12 @@
        >
       Refresh chart
        </v-btn>
+       <v-btn
+       @click="updateChartToCompare"
+       color="primary"
+       >
+      Compare
+       </v-btn>
         <apexchart type="bar" height="350" :options="chartOptions" :series="series" v-model="series"></apexchart>
       </div>
 </template>
@@ -20,7 +26,8 @@ Vue.component("apexchart", VueApexCharts);
 
 export default {
   name: "ColumnChart",
-  computed: mapGetters("fields", ["getSeries","getFilters","getEntityTypes", "getCategories", "getFieldSelected"]),
+  computed: mapGetters("fields", ["getSeries","getFilters","getEntityTypes", "getCategories", "getFieldSelected",
+  "getSeriesToCompare","getCategoriesToCompare", "getEntityTypeSelected"]),
   data: function() {
     return {
       seriesDB:{
@@ -91,12 +98,30 @@ export default {
       },
       }
       this.series = [{
-        name: 'Number_entities',
+        name: this.getEntityTypeSelected.name,
         data: this.getSeries
       }];   // return chartOptions;
       
 
       console.log(this.getSeries);
+
+    },
+    updateChartToCompare(){
+      this.updateChartSeries();
+      
+      this.chartOptions = {
+      ...this.chartOptions,
+      xaxis: {
+        categories: this.getCategoriesToCompare,
+      },
+      }
+      this.series.push({
+        name: this.getEntityTypeSelected.name,
+        data: this.getSeriesToCompare
+      });   // return chartOptions;
+      
+
+      console.log(this.getSeriesToCompare);
 
     }
   },
@@ -105,7 +130,12 @@ export default {
     this.series.push({
       name: this.seriesDB.name,
       data: this.seriesDB.data
-    });
+    },
+    {
+      name: this.seriesDB.name,
+      data: this.seriesDB.data
+    }
+    );
 
     console.log(this.getFilters);
     console.log(this.getSeries);
